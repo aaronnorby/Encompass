@@ -10032,7 +10032,7 @@ var Landing = React.createClass({
   },
 
   componentDidMount: function componentDidMount() {
-    d3.json('data/seedData.json', (function (error, data) {
+    d3.json('/data/company', (function (error, data) {
       if (error) console.log(error);
 
       this.setState({ data: data });
@@ -10109,7 +10109,8 @@ var Scatter = React.createClass({
     });
 
     var dots = dots.map(function (dot) {
-      return React.createElement(Dot, { xcoord: xscale(dot.employees), ycoord: yscale(dot.employees_mom) });
+      console.log('dot', dot.employees);
+      return React.createElement(Dot, { xcoord: xscale(dot.employees), ycoord: yscale(dot.employees_mom * 100) });
     });
 
     return dots;
@@ -10131,15 +10132,12 @@ var Scatter = React.createClass({
     var yAxis = d3.svg.axis().scale(y).orient("left");
 
     // clean the percent sign out of the data
-    this.props.data.forEach(function (d) {
-      return d.employees_mom = d.employees_mom.replace('%', '');
-    });
 
     x.domain(d3.extent(this.props.data, function (d) {
       return +d.employees;
     })).nice();
     y.domain(d3.extent(this.props.data, function (d) {
-      return +d.employees_mom;
+      return +d.employees_mom * 100;
     })).nice();
 
     return React.createElement(

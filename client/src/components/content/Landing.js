@@ -47,7 +47,7 @@ var Landing = React.createClass({
   },
 
   componentDidMount: function() {
-    d3.json('data/seedData.json', function(error, data) {
+    d3.json('/data/company', function(error, data) {
       if (error) console.log(error);
 
       this.setState({data: data});

@@ -24,7 +24,8 @@ var Scatter = React.createClass({
     });
 
     var dots = dots.map(function(dot) {
-      return (<Dot xcoord={xscale(dot.employees)} ycoord={yscale(dot.employees_mom)} />);
+      console.log('dot', dot.employees);
+      return (<Dot xcoord={xscale(dot.employees)} ycoord={yscale(dot.employees_mom * 100)} />);
     });
 
     return dots;
@@ -52,12 +53,10 @@ var Scatter = React.createClass({
       .orient("left");
     
     // clean the percent sign out of the data
-    this.props.data.forEach(function(d) {
-      return d.employees_mom = (d.employees_mom).replace('%', '');
-    });
+    
 
     x.domain(d3.extent(this.props.data, function(d) {return +d.employees})).nice();
-    y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom})).nice();
+    y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom * 100})).nice();
 
     return (
       <svg height={height} width={width}>
