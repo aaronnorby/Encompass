@@ -33,8 +33,8 @@ var Scatter = React.createClass({
 
   render: function() {
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
-      width = 960 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+      width = 6000 - margin.left - margin.right,
+      height = 6000 - margin.top - margin.bottom;
 
     var x = d3.scale.linear()
       .range([0, width]);
@@ -52,18 +52,21 @@ var Scatter = React.createClass({
       .scale(y)
       .orient("left");
     
-    // clean the percent sign out of the data
     
 
-    x.domain(d3.extent(this.props.data, function(d) {return +d.employees})).nice();
-    y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom * 100})).nice();
+    x.domain(d3.extent(this.props.data, function(d) {return +d.employees}));
+    y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom * 100}));
+
+    var viewerStyle = {height: "500px", width:"500px", border: "2px solid #000", overflow: "scroll", margin: "auto"};
 
     return (
-      <svg height={height} width={width}>
-        <g>
-          {this.drawDots(x, y)}
-        </g>
-      </svg>
+      <div id="viewer" style={viewerStyle}>  
+        <svg height={height} width={width}>
+          <g>
+            {this.drawDots(x, y)}
+          </g>
+        </svg>
+      </div>
     )
   }
 
