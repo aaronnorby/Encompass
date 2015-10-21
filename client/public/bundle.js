@@ -9605,6 +9605,7 @@ module.exports = {
   ContentView: ContentView
 };
 
+<<<<<<< HEAD
 },{"./content/AddOffer":6,"./content/CompanyProfile":7,"./content/Landing.js":8,"./content/SearchCompany":9,"./content/UserProfile":10}],4:[function(require,module,exports){
 'use strict';
 
@@ -9976,17 +9977,40 @@ module.exports = {
   CompanyProfile: CompanyProfile
 };
 
+<<<<<<< HEAD
 },{}],8:[function(require,module,exports){
 "use strict";
+=======
+},{}],7:[function(require,module,exports){
+'use strict';
+>>>>>>> Make some performance improvements to scatterplot rendering
 
 var d3 = require('d3');
+var Scatter = require('./Scatter.js');
+
+var Count = React.createClass({
+  displayName: 'Count',
+
+  render: function render() {
+    var countEm = function countEm(d) {
+      return Object.keys(d).length;
+    };
+
+    return React.createElement(
+      'h2',
+      null,
+      countEm(this.props.data),
+      ' Companies'
+    );
+  }
+});
 
 var ChartFrame = React.createClass({
-  displayName: "ChartFrame",
+  displayName: 'ChartFrame',
 
   getInitialState: function getInitialState() {
-    var height = 499;
-    var width = 1094;
+    var height = 375;
+    var width = 820;
     return {
       svgHeight: height,
       svgWidth: width
@@ -9996,7 +10020,7 @@ var ChartFrame = React.createClass({
   render: function render() {
     var svgStyle = { border: "2px solid black" };
 
-    return React.createElement("svg", { style: svgStyle,
+    return React.createElement('svg', { style: svgStyle,
       height: this.state.svgHeight,
       width: this.state.svgWidth,
       dangerouslySetInnerHTML: { __html: "<image height=" + this.state.svgHeight + " width=" + this.state.svgWidth + " xlink:href=" + this.props.source + " />" } });
@@ -10004,12 +10028,21 @@ var ChartFrame = React.createClass({
 });
 
 var Landing = React.createClass({
-  displayName: "Landing",
+  displayName: 'Landing',
 
   getInitialState: function getInitialState() {
     return {
-      sources: ['images/mom-employees.png', 'images/funding-employee-funding.png', 'images/funding-employee-growth.png']
+      sources: ['images/mom-employees.png', 'images/funding-employee-funding.png', 'images/funding-employee-growth.png'],
+      data: []
     };
+  },
+
+  componentDidMount: function componentDidMount() {
+    d3.json('data/seedData.json', (function (error, data) {
+      if (error) console.log(error);
+
+      this.setState({ data: data });
+    }).bind(this));
   },
 
   drawCharts: function drawCharts() {
@@ -10022,24 +10055,115 @@ var Landing = React.createClass({
   render: function render() {
     var svgStyle = { border: "2px solid black" };
     return React.createElement(
-      "div",
+      'div',
       null,
       React.createElement(
-        "div",
+        'div',
         null,
         React.createElement(
-          "h1",
+          'h1',
           null,
-          "Placeholder Charts"
+          'Placeholder Charts'
         )
       ),
-      this.drawCharts()
+      React.createElement(
+        'div',
+        null,
+        this.drawCharts()
+      ),
+      React.createElement(
+        'div',
+        null,
+        React.createElement(Count, { data: this.state.data })
+      ),
+      React.createElement(
+        'div',
+        null,
+        React.createElement(Scatter, { data: this.state.data })
+      )
     );
   }
 });
 
 module.exports = Landing;
 
+<<<<<<< HEAD
+=======
+},{"./Scatter.js":8,"d3":1}],8:[function(require,module,exports){
+"use strict";
+
+var d3 = require('d3');
+
+var Dot = React.createClass({
+  displayName: "Dot",
+
+  render: function render() {
+    return React.createElement("circle", { cx: this.props.xcoord, cy: this.props.ycoord, r: "1", style: { "fill": "red" } });
+  }
+});
+
+var Scatter = React.createClass({
+  displayName: "Scatter",
+
+  getInitialState: function getInitialState() {
+    return {
+      data: this.props.data
+    };
+  },
+
+  drawDots: function drawDots(xscale, yscale) {
+    var dots = this.props.data.map(function (dot) {
+      if (dot.employees === '' || dot.employees_mom === '') {
+        console.log('skip');
+        return;
+      }
+      return React.createElement(Dot, { xcoord: xscale(+dot.employees), ycoord: yscale(+dot.employees_mom) });
+    });
+
+    return dots;
+  },
+
+  render: function render() {
+    var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    var x = d3.scale.linear().range([0, width]);
+
+    var y = d3.scale.linear().range([height, 0]);
+
+    var color = d3.scale.category10();
+
+    var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
+    var yAxis = d3.svg.axis().scale(y).orient("left");
+
+    // clean the percent sign out of the data
+    this.props.data.forEach(function (d) {
+      return d.employees_mom = d.employees_mom.replace('%', '');
+    });
+
+    // x.domain(d3.extent(this.props.data, function(d) {return +d.employees})).nice();
+    // y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom})).nice();
+    x.domain(d3.extent([0, 800]));
+    y.domain(d3.extent([-50, 50]));
+
+    return React.createElement(
+      "svg",
+      { height: height, width: width },
+      React.createElement(
+        "g",
+        null,
+        this.drawDots(x, y)
+      )
+    );
+  }
+
+});
+
+module.exports = Scatter;
+
+>>>>>>> Make some performance improvements to scatterplot rendering
 },{"d3":1}],9:[function(require,module,exports){
 // react does not regenerate the list items when the user deletes/retypes their search
 
