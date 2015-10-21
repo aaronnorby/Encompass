@@ -19,12 +19,12 @@ var Scatter = React.createClass({
 
 
   drawDots: function(xscale, yscale) {
-    var dots = this.props.data.map(function(dot) {
-      if (dot.employees === '' || dot.employees_mom === '') {
-        console.log('skip');
-        return;
-      }
-      return (<Dot xcoord={xscale(+dot.employees)} ycoord={yscale(+dot.employees_mom)} />);
+    var dots = this.props.data.filter(function(dot) {
+      return !isNaN(parseFloat(dot.employees)) && !isNaN(parseFloat(dot.employees_mom));
+    });
+
+    var dots = dots.map(function(dot) {
+      return (<Dot xcoord={xscale(dot.employees)} ycoord={yscale(dot.employees_mom)} />);
     });
 
     return dots;
@@ -56,10 +56,8 @@ var Scatter = React.createClass({
       return d.employees_mom = (d.employees_mom).replace('%', '');
     });
 
-    // x.domain(d3.extent(this.props.data, function(d) {return +d.employees})).nice();
-    // y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom})).nice();
-    x.domain(d3.extent([0, 800]));
-    y.domain(d3.extent([-50, 50]));
+    x.domain(d3.extent(this.props.data, function(d) {return +d.employees})).nice();
+    y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom})).nice();
 
     return (
       <svg height={height} width={width}>

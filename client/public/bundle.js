@@ -9539,7 +9539,7 @@ module.exports = {
   AppView: AppView
 };
 
-},{"./ContentFrame":3,"./NavbarFrame":4,"./navbar/Tabs":12}],3:[function(require,module,exports){
+},{"./ContentFrame":3,"./NavbarFrame":4,"./navbar/Tabs":13}],3:[function(require,module,exports){
 'use strict';
 
 var UserProfile = require('./content/UserProfile').UserProfile;
@@ -9605,8 +9605,7 @@ module.exports = {
   ContentView: ContentView
 };
 
-<<<<<<< HEAD
-},{"./content/AddOffer":6,"./content/CompanyProfile":7,"./content/Landing.js":8,"./content/SearchCompany":9,"./content/UserProfile":10}],4:[function(require,module,exports){
+},{"./content/AddOffer":6,"./content/CompanyProfile":7,"./content/Landing.js":8,"./content/SearchCompany":10,"./content/UserProfile":11}],4:[function(require,module,exports){
 'use strict';
 
 var Tabs = require('./navbar/Tabs').Tabs;
@@ -9632,7 +9631,7 @@ module.exports = {
   NavBar: NavBar
 };
 
-},{"./navbar/Tabs":12}],5:[function(require,module,exports){
+},{"./navbar/Tabs":13}],5:[function(require,module,exports){
 'use strict';
 
 var AppView = require('./AppFrame').AppView;
@@ -9977,13 +9976,8 @@ module.exports = {
   CompanyProfile: CompanyProfile
 };
 
-<<<<<<< HEAD
 },{}],8:[function(require,module,exports){
-"use strict";
-=======
-},{}],7:[function(require,module,exports){
 'use strict';
->>>>>>> Make some performance improvements to scatterplot rendering
 
 var d3 = require('d3');
 var Scatter = require('./Scatter.js');
@@ -10087,9 +10081,7 @@ var Landing = React.createClass({
 
 module.exports = Landing;
 
-<<<<<<< HEAD
-=======
-},{"./Scatter.js":8,"d3":1}],8:[function(require,module,exports){
+},{"./Scatter.js":9,"d3":1}],9:[function(require,module,exports){
 "use strict";
 
 var d3 = require('d3');
@@ -10112,12 +10104,12 @@ var Scatter = React.createClass({
   },
 
   drawDots: function drawDots(xscale, yscale) {
-    var dots = this.props.data.map(function (dot) {
-      if (dot.employees === '' || dot.employees_mom === '') {
-        console.log('skip');
-        return;
-      }
-      return React.createElement(Dot, { xcoord: xscale(+dot.employees), ycoord: yscale(+dot.employees_mom) });
+    var dots = this.props.data.filter(function (dot) {
+      return !isNaN(parseFloat(dot.employees)) && !isNaN(parseFloat(dot.employees_mom));
+    });
+
+    var dots = dots.map(function (dot) {
+      return React.createElement(Dot, { xcoord: xscale(dot.employees), ycoord: yscale(dot.employees_mom) });
     });
 
     return dots;
@@ -10143,10 +10135,12 @@ var Scatter = React.createClass({
       return d.employees_mom = d.employees_mom.replace('%', '');
     });
 
-    // x.domain(d3.extent(this.props.data, function(d) {return +d.employees})).nice();
-    // y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom})).nice();
-    x.domain(d3.extent([0, 800]));
-    y.domain(d3.extent([-50, 50]));
+    x.domain(d3.extent(this.props.data, function (d) {
+      return +d.employees;
+    })).nice();
+    y.domain(d3.extent(this.props.data, function (d) {
+      return +d.employees_mom;
+    })).nice();
 
     return React.createElement(
       "svg",
@@ -10163,8 +10157,7 @@ var Scatter = React.createClass({
 
 module.exports = Scatter;
 
->>>>>>> Make some performance improvements to scatterplot rendering
-},{"d3":1}],9:[function(require,module,exports){
+},{"d3":1}],10:[function(require,module,exports){
 // react does not regenerate the list items when the user deletes/retypes their search
 
 "use strict";
@@ -10229,7 +10222,7 @@ module.exports = {
   SearchCompany: SearchCompany
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 // this page will contain the MyOffers and MyCompanies subviews
 
 "use strict";
@@ -10251,7 +10244,7 @@ module.exports = {
   UserProfile: UserProfile
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 var Tab = React.createClass({
@@ -10279,7 +10272,7 @@ module.exports = {
   Tab: Tab
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var tabList = [{ 'id': 1, 'name': 'Home', 'url': '/#/home' }, { 'id': 2, 'name': 'My Profile', 'url': '/#/profile' }, { 'id': 3, 'name': 'Company (to be removed from header)', 'url': '/#/company' }, { 'id': 4, 'name': 'Add Offer', 'url': '/#/addoffer' }, { 'id': 5, 'name': 'Search Startups', 'url': '/#/searchcompany' }, { 'id': 6, 'name': 'Login', 'url': '/#/login' }, { 'id': 7, 'name': 'Signup', 'url': '/#/signup' }];
@@ -10313,4 +10306,4 @@ module.exports = {
   Tabs: Tabs
 };
 
-},{"./Tab":11}]},{},[5]);
+},{"./Tab":12}]},{},[5]);
