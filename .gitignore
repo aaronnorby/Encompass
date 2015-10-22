@@ -1,6 +1,9 @@
 # aaron messing around with some data 
 data/
 
+## bundle
+bundle.js
+
 ## node etc ###
 .DS_Store
 
