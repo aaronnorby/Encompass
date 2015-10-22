@@ -47,7 +47,7 @@ var Landing = React.createClass({
   },
 
   componentDidMount: function() {
-    d3.json('/data/company', function(error, data) {
+    d3.json('/data/company?fields[]=employees_mom&fields[]=employees', function(error, data) {
       if (error) console.log(error);
 
       this.setState({data: data});

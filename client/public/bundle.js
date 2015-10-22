@@ -10032,7 +10032,7 @@ var Landing = React.createClass({
   },
 
   componentDidMount: function componentDidMount() {
-    d3.json('/data/company', (function (error, data) {
+    d3.json('/data/company?fields[]=employees_mom&fields[]=employees', (function (error, data) {
       if (error) console.log(error);
 
       this.setState({ data: data });
@@ -10109,7 +10109,6 @@ var Scatter = React.createClass({
     });
 
     var dots = dots.map(function (dot) {
-      console.log('dot', dot.employees);
       return React.createElement(Dot, { xcoord: xscale(dot.employees), ycoord: yscale(dot.employees_mom * 100) });
     });
 
@@ -10118,14 +10117,14 @@ var Scatter = React.createClass({
 
   render: function render() {
     var margin = { top: 20, right: 20, bottom: 30, left: 40 },
-        width = 6000 - margin.left - margin.right,
-        height = 6000 - margin.top - margin.bottom;
+        width = 10000 - margin.left - margin.right,
+        height = 10000 - margin.top - margin.bottom;
 
     var x = d3.scale.linear().range([0, width]);
 
     var y = d3.scale.linear().range([height, 0]);
 
-    var color = d3.scale.category10();
+    // var color = d3.scale.category10();
 
     var xAxis = d3.svg.axis().scale(x).orient("bottom");
 
@@ -10143,9 +10142,11 @@ var Scatter = React.createClass({
     return React.createElement(
       "div",
       { id: "viewer", style: viewerStyle },
+      React.createElement("g", null),
       React.createElement(
         "svg",
-        { height: height, width: width },
+        { height: height + margin.top + margin.bottom,
+          width: width + margin.left + margin.bottom },
         React.createElement(
           "g",
           null,

@@ -24,7 +24,6 @@ var Scatter = React.createClass({
     });
 
     var dots = dots.map(function(dot) {
-      console.log('dot', dot.employees);
       return (<Dot xcoord={xscale(dot.employees)} ycoord={yscale(dot.employees_mom * 100)} />);
     });
 
@@ -33,8 +32,8 @@ var Scatter = React.createClass({
 
   render: function() {
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
-      width = 6000 - margin.left - margin.right,
-      height = 6000 - margin.top - margin.bottom;
+      width = 10000 - margin.left - margin.right,
+      height = 10000 - margin.top - margin.bottom;
 
     var x = d3.scale.linear()
       .range([0, width]);
@@ -42,7 +41,7 @@ var Scatter = React.createClass({
     var y = d3.scale.linear()
       .range([height, 0]);
 
-    var color = d3.scale.category10();
+    // var color = d3.scale.category10();
 
     var xAxis = d3.svg.axis()
       .scale(x)
@@ -58,10 +57,15 @@ var Scatter = React.createClass({
     y.domain(d3.extent(this.props.data, function(d) {return +d.employees_mom * 100}));
 
     var viewerStyle = {height: "500px", width:"500px", border: "2px solid #000", overflow: "scroll", margin: "auto"};
+    
 
     return (
       <div id="viewer" style={viewerStyle}>  
-        <svg height={height} width={width}>
+        <g>
+          
+        </g>
+        <svg height={height + margin.top + margin.bottom} 
+          width={width + margin.left + margin.bottom}>
           <g>
             {this.drawDots(x, y)}
           </g>
